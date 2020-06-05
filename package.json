@@ -1,0 +1,20 @@
+{
+  "name": "ily",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sls": "serverless"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "serverless": "^1.72.0",
+    "serverless-pseudo-parameters": "^2.5.0"
+  },
+  "dependencies": {
+    "middy": "^0.36.0",
+    "twilio": "^3.45.0"
+  }
+}

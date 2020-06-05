@@ -1,0 +1,35 @@
+service: ily-${self:custom.name}
+
+custom:
+  name: 'sahar'
+  stage: ${opt:stage, self:provider.stage}
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  environment:
+    serviceName: ${self:service}
+    stage: ${self:custom.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action: execute-api:Invoke
+      Resource: arn:aws:execute-api:#{AWS::Region}:#{AWS::AccountId}:#{ApiGatewayRestApi}/${self:provider.stage}/POST/api/sendText
+    - Effect: Allow
+      Action: ssm:GetParameters*
+      Resource:
+        - arn:aws:ssm:#{AWS::Region}:#{AWS::AccountId}:parameter/${self:service}/${self:provider.stage}/twilioAccountSid
+        - arn:aws:ssm:#{AWS::Region}:#{AWS::AccountId}:parameter/${self:service}/${self:provider.stage}/twilioAuthToken
+        - arn:aws:ssm:#{AWS::Region}:#{AWS::AccountId}:parameter/${self:service}/${self:provider.stage}/twilioPhoneNumber
+
+functions:
+  sendText:
+    handler: functions/handler.sendText
+    events:
+      - http:
+          path: api/sendText
+          method: post
+          # integration: lambda
+          cors: true
+
+plugins:
+  - serverless-pseudo-parameters
