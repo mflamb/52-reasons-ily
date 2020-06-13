@@ -4,3 +4,13 @@ node_modules
 
 # Serverless directories
 .serverless
+
+# Reasons to be seeded into DB
+seed-reasons.js
+
+# Original experimental function with class (external file) for intializing Twilio client to send texts.  Realized that Twilio's API makes responding to texts much simpler, so these files with more custom code aren't needed.  Will re-use in other projects, but don't want it in the repo anymore.
+customTextTrigger.js
+messenger.js
+
+# .env file
+.env
