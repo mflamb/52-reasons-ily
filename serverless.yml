@@ -25,6 +25,14 @@ functions:
     environment:
       reasons_table: !Ref ReasonsTable
       bus_name: !Ref EventBus
+      service_name: ${self:service}
+      stage: ${self:custom.stage}
+      twilio_webhook_endpoint:
+        Fn::Join:
+          - ""
+          - - https://
+            - !Ref ApiGatewayRestApi
+            - .execute-api.${self:provider.region}.amazonaws.com/${self:custom.stage}/sendText
     iamRoleStatements:
       - Effect: Allow
         Action: execute-api:Invoke
@@ -37,7 +45,10 @@ functions:
       - Effect: Allow
         Action: events:PutEvents
         Resource: "*"
-        
+      - Effect: Allow
+        Action: ssm:GetParameters*
+        Resource:
+          - arn:aws:ssm:#{AWS::Region}:#{AWS::AccountId}:parameter/${self:service}/${self:custom.stage}/twilioAuthToken
 
   resetReasons:
     handler: functions/resetReasons.handler
